@@ -6,6 +6,7 @@ import CurrentTransaction from "./CurrentTransaction";
 import TransactionList from "./TransactionList";
 import CryptoChart from "./CryptoChart";
 import { getApiKey } from "@/lib/api";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 const Dashboard = () => {
   const [isConnected, setIsConnected] = useState<boolean>(!!getApiKey());
@@ -26,8 +27,12 @@ const Dashboard = () => {
       </header>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <PortfolioValue />
-        <CurrentTransaction />
+        <ErrorBoundary fallback={<div className="glass-card rounded-lg p-4">Unable to load portfolio data</div>}>
+          <PortfolioValue />
+        </ErrorBoundary>
+        <ErrorBoundary fallback={<div className="glass-card rounded-lg p-4">Unable to load transaction data</div>}>
+          <CurrentTransaction />
+        </ErrorBoundary>
         <div className="md:col-span-1 flex items-center justify-center p-4 glass-card rounded-lg animate-scale-in">
           <button 
             onClick={() => setIsConnected(false)}
@@ -40,10 +45,14 @@ const Dashboard = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-1">
-          <TransactionList />
+          <ErrorBoundary fallback={<div className="glass-card rounded-lg p-4">Unable to load transaction list</div>}>
+            <TransactionList />
+          </ErrorBoundary>
         </div>
         <div className="md:col-span-2">
-          <CryptoChart />
+          <ErrorBoundary fallback={<div className="glass-card rounded-lg p-4">Unable to load chart data</div>}>
+            <CryptoChart />
+          </ErrorBoundary>
         </div>
       </div>
     </div>
