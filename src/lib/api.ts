@@ -1,5 +1,4 @@
-
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/hooks/use-toast";
 
 // Types for our API responses
 export interface Transaction {
@@ -105,15 +104,26 @@ export const testConnection = async (): Promise<boolean> => {
     });
     
     if (response.ok) {
-      toast.success("Connected to Python backend successfully");
+      toast({
+        title: "Success",
+        description: "Connected to Python backend successfully"
+      });
       return true;
     } else {
-      toast.error("Failed to connect to backend");
+      toast({
+        title: "Error",
+        description: "Failed to connect to backend",
+        variant: "destructive"
+      });
       return false;
     }
   } catch (error) {
     console.error("Connection error:", error);
-    toast.error("Connection error. Is your Python backend running?");
+    toast({
+      title: "Error",
+      description: "Connection error. Is your Python backend running?",
+      variant: "destructive"
+    });
     return false;
   }
 };
